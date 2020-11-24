@@ -2,49 +2,75 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/userPanel"
-    android:visibility="gone"
+    android:id="@+id/FrameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:visibility="gone"
+    android:background="@android:color/white"
+    tools:context=".MainActivity"
 
+    tools:visibility="visible">
 
     <ListView
         android:id="@+id/listView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:divider="@android:color/transparent">
 
-        <LinearLayout
+        <FrameLayout
+            android:id="@+id/userPanel"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"></LinearLayout>
+            android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/NameTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TextView" />
 
-        <TextView
-            android:id="@+id/StateTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TextView" />
+        </FrameLayout>
     </ListView>
 
     <Button
-        android:id="@+id/Button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/abc_vector_test"
-        android:onClick="BackToList"
-        android:text="Button" />
 
-    <TextView
-        android:id="@+id/AgeTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/ic_baseline_keyboard_backspace_24"
+        android:onClick="BackToList" />
 
+    <Button
+
+        android:onClick="EditUser"
+        android:background="@drawable/ic_baseline_keyboard_edit_24"
+        android:layout_gravity="right"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="50dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+
+     />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="100dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/NameTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/NameText" />
+
+        <TextView
+            android:id="@+id/StateTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/StateText" />
+
+        <TextView
+            android:id="@+id/AgeTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/BaseContainer"
+             />
+    </LinearLayout>
 
 </FrameLayout>

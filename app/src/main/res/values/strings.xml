@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">Islamgulov</string>
+    <string name="nameHit" />
+    <string name="stateHit" />
+
+    <string name="save">Coхранить</string>
+    <string name="nameHint">Имя</string>
+    <string name="stateHint">Статус</string>
+    <string name="ageHint">Возраст</string>
+
+
 </resources>

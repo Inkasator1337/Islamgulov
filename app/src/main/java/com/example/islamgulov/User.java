@@ -2,12 +2,28 @@ package com.example.islamgulov;
 
 public class User {
     private String Name, State;
+    private int Age;
 
-    public User(String name, String state, int age) {
+    public  int getStateSignal()
+    {
+        return StateSignal;
+    }
+    public void setStateSignal(int stateSignal) {
+        StateSignal = stateSignal;
+    }
+
+
+    public User(String name, String state, int age, int stateSignal) {
         Name = name;
         State = state;
         Age = age;
+        StateSignal = stateSignal;
+
     }
+
+   
+
+    private int StateSignal;
 
 
     public String getName() {
@@ -34,5 +50,5 @@ public class User {
         Age = age;
     }
 
-    private int Age ;
+
 }
