@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "284436897138",
+    "firebase_url": "https://islamgulov-cd2be.firebaseio.com",
+    "project_id": "islamgulov-cd2be",
+    "storage_bucket": "islamgulov-cd2be.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:284436897138:android:148e553b44ee8f825751eb",
+        "android_client_info": {
+          "package_name": "com.example.islamgulov"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "284436897138-a63a3q5u3s2anbjkvjmsmi6ohi2m47ad.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.islamgulov",
+            "certificate_hash": "95cf8cf25b34703cf6f38e81c540799776a3c404"
+          }
+        },
+        {
+          "client_id": "284436897138-rqlrf48er69m0s0kiorq1asfjcvnbgh8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAB2h4AVxWwmUG3gkpzdoKyGPc8E1Jp6-M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "284436897138-rqlrf48er69m0s0kiorq1asfjcvnbgh8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
