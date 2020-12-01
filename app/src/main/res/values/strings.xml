@@ -15,6 +15,7 @@
 
     <string name="NullParametersMessage">Не все поля заполненны!</string>
     <string name="CantSignInMessage" />
+    <string name="goSignUp">Зарегистрироваться</string>
 
 
 </resources>
