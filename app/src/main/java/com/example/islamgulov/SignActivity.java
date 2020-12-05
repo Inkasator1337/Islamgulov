@@ -7,6 +7,8 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.TabHost;
 import android.widget.Toast;
@@ -67,7 +69,7 @@ public class SignActivity extends AppCompatActivity {
     }
 
     public void SignIn(View view) {
-       if (StringNoNull(getPassword())&& StringNoNull(getLogin()))
+       if (EditTextNoNullWithAnimation(PasswordTextView)&& EditTextNoNullWithAnimation(LoginTextView))
 
 
        {
@@ -158,20 +160,43 @@ public class SignActivity extends AppCompatActivity {
 
 
         public void SignUp(View view) {
-        if(StringNoNull(getNewLogin()) && StringNoNull(getNewPassword()) && StringNoNull(getNewName())&& StringNoNull(getNewState()))
+        if(EditTextNoNullWithAnimation(NewLoginTextView) && EditTextNoNullWithAnimation(NewPasswordTextView) && EditTextNoNullWithAnimation(NewNameTextView)&& EditTextNoNullWithAnimation(NewStateTextView))
             {
-                FirebaseDatabase database = FirebaseDatabase.getInstance();
-                //id for profile forming by Firebase
-                String id = database.getReference(USERS_PROFILE_INFO).push().getKey();
-                String login = getNewLogin();
-                //Adding user
-                database.getReference(USERS_SIGN_IN_INFO).child(login).child(PASSWORD).setValue(getNewPassword());
-                database.getReference(USERS_PROFILE_INFO).child(login).child(PROFILE_ID).setValue(id);
-                // Adding user profile
-                database.getReference(USERS_PROFILE_INFO).child(id).child(AGE).setValue(getNewAge());
-                database.getReference(USERS_PROFILE_INFO).child(id).child(NAME).setValue(getNewName());
-                database.getReference(USERS_PROFILE_INFO).child(id).child(STATE).setValue(getNewState());
-                goNext(id);
+                FirebaseDatabase database1 = FirebaseDatabase.getInstance();
+                DatabaseReference myRef = database1.getReference(USERS_SIGN_IN_INFO).child(getNewLogin());
+                myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.child(PASSWORD).exists())
+                        {
+                            FirebaseDatabase database = FirebaseDatabase.getInstance();
+                            //id for profile forming by Firebase
+                            String id = database.getReference(USERS_PROFILE_INFO).push().getKey();
+                            String login = getNewLogin();
+                            //Adding user
+                            database.getReference(USERS_SIGN_IN_INFO).child(login).child(PASSWORD).setValue(getNewPassword());
+                            database.getReference(USERS_PROFILE_INFO).child(login).child(PROFILE_ID).setValue(id);
+                            // Adding user profile
+                            database.getReference(USERS_PROFILE_INFO).child(id).child(AGE).setValue(getNewAge());
+                            database.getReference(USERS_PROFILE_INFO).child(id).child(NAME).setValue(getNewName());
+                            database.getReference(USERS_PROFILE_INFO).child(id).child(STATE).setValue(getNewState());
+                            goNext(id);
+                        }
+                        else
+                        {
+                            Toast.makeText(SignActivity.this,
+                                    getResources().getText(R.string.UserExistMessage),
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+
 
             }
         else
@@ -181,5 +206,15 @@ public class SignActivity extends AppCompatActivity {
                       getResources().getText(R.string.NullParametersMessage),
                       Toast.LENGTH_SHORT).show();
             }
+    }
+
+    private boolean EditTextNoNullWithAnimation(EditText animationTextView) {
+        boolean NoNullText = StringNoNull(animationTextView.getText().toString());
+        Animation animation = AnimationUtils.loadAnimation(
+                SignActivity.this,R.anim.error_edit );
+          if(!NoNullText)
+              animationTextView.startAnimation(animation);
+          return NoNullText;
+
     }
 }
