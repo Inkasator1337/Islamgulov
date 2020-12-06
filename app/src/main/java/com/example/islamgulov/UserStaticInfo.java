@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserStaticInfo {
+
+    // key of login parameter
+    public final static String LOGIN = "login";
+
     public final static String POSITION = "position";
     public  final static String USERS_SIGN_IN_INFO = "UsersSignInInfo";
 

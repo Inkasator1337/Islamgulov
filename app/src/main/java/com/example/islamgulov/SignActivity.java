@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.view.View;
@@ -19,9 +21,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import static com.example.islamgulov.Transform.APP_REFERENCES;
+import static com.example.islamgulov.Transform.SaveUser;
 import static com.example.islamgulov.Transform.StringNoNull;
 import static com.example.islamgulov.Transform.Vibrate;
 import static com.example.islamgulov.UserStaticInfo.AGE;
+import static com.example.islamgulov.UserStaticInfo.LOGIN;
 import static com.example.islamgulov.UserStaticInfo.NAME;
 import static com.example.islamgulov.UserStaticInfo.PASSWORD;
 import static com.example.islamgulov.UserStaticInfo.PROFILE_ID;
@@ -39,6 +44,19 @@ public class SignActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign);
         Init();
+
+        CheckSignInInfo();
+    }
+
+    private void CheckSignInInfo()
+    {
+        SharedPreferences sp = getSharedPreferences(APP_REFERENCES,
+                Context.MODE_PRIVATE);
+        String login = sp.getString(LOGIN,"");
+        String password = sp.getString(PASSWORD,"");
+        LoginTextView.setText(login);
+        PasswordTextView.setText(password);
+        SignIn();
     }
 
     private void Init() {
@@ -68,7 +86,8 @@ public class SignActivity extends AppCompatActivity {
         NewStateTextView = findViewById(R.id.NewStateTextView);
     }
 
-    public void SignIn(View view) {
+    public void SignIn()
+    {
        if (EditTextNoNullWithAnimation(PasswordTextView)&& EditTextNoNullWithAnimation(LoginTextView))
 
 
@@ -86,7 +105,7 @@ public class SignActivity extends AppCompatActivity {
                    if (value != null)
                    {
                        if (value.toString().equals(getPassword())) {
-                           goNext(dataSnapshot.child(login).child(PROFILE_ID).getValue().toString());
+                           goNext(dataSnapshot.child(PROFILE_ID).toString(),login,getPassword());
                        } else CantSignIn();
                    }
 
@@ -118,8 +137,17 @@ public class SignActivity extends AppCompatActivity {
         return LoginTextView.getText().toString();
     }
 
-    private void goNext(String profileId) {
+    private void goNext (String profileId, String login, String password)
+    {
+
+        SaveUser(getSharedPreferences(APP_REFERENCES, Context.MODE_PRIVATE),
+                login,password);
         UserStaticInfo.profileId = profileId;
+        // Go to the LoadedUserDataActivity
+        Intent intent = new Intent(this,LoadedUserDataActivity.class);
+        startActivity(intent);
+        // Close Sign in window for can't come back by user
+        finish();
     }
 
     private void CantSignIn() {
@@ -180,7 +208,7 @@ public class SignActivity extends AppCompatActivity {
                             database.getReference(USERS_PROFILE_INFO).child(id).child(AGE).setValue(getNewAge());
                             database.getReference(USERS_PROFILE_INFO).child(id).child(NAME).setValue(getNewName());
                             database.getReference(USERS_PROFILE_INFO).child(id).child(STATE).setValue(getNewState());
-                            goNext(id);
+                            goNext(id, login,getNewPassword());
                         }
                         else
                         {
