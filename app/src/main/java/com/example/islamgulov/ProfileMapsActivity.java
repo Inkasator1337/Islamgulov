@@ -2,6 +2,7 @@ package com.example.islamgulov;
 
 import androidx.fragment.app.FragmentActivity;
 
+import android.location.Location;
 import android.os.Bundle;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -10,10 +11,15 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import android.widget.TextView;
 
 public class ProfileMapsActivity extends FragmentActivity implements OnMapReadyCallback {
+    private TextView LatitudeTextView, LongitudeTextView;
 
     private GoogleMap mMap;
+
+    public ProfileMapsActivity() {
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +29,13 @@ public class ProfileMapsActivity extends FragmentActivity implements OnMapReadyC
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        Init();
+    }
+
+    private void Init()
+    {
+        LatitudeTextView = findViewById(R.id.LatitudeTextView);
+
     }
 
     /**
@@ -37,10 +50,25 @@ public class ProfileMapsActivity extends FragmentActivity implements OnMapReadyC
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        mMap.setMyLocationEnabled(true);
+         mMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
+             @Override
+             public void onMyLocationChange(Location location) {
+                 if(location != null)
+                 {
+                     LatitudeTextView = setText(String.valueOf(location.getLatitude()));
+                     LongitudeTextView = setText(String.valueOf(location.getLongitude()));
+                 }
+
+             }
+         });
 
         // Add a marker in Sydney and move the camera
         LatLng sydney = new LatLng(-34, 151);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+    }
+
+    private class TextView {
     }
 }
