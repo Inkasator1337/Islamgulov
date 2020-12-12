@@ -1,5 +1,6 @@
 package com.example.islamgulov;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
@@ -54,27 +55,50 @@ public class ProfileMapsActivity extends FragmentActivity implements OnMapReadyC
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-              ActivityCompat.requestPermissions(ProfileMapsActivity.this,
-                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},123); }
+                != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED)
+        {
 
-
-
+            ActivityCompat.requestPermissions(ProfileMapsActivity.this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},123);
         }
-        mMap.setMyLocationEnabled(true);
-             mMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
-                 @Override
-                 public void onMyLocationChange(Location location) {
-                     if (location != null) {
-                         LatitudeTextView = setText(String.valueOf(location.getLatitude()));
-                         LongitudeTextView = setText(String.valueOf(location.getLongitude()));
-                     }
-                 }
+        else
+        {
+            setMapLocationChange();
+        }
 
-             });
-         }}
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        try { setMapLocationChange();}
+        catch (Exception e){}
+
+
+    }
+
+    private void setMapLocationChange() {
+        mMap.setMyLocationEnabled(true);
+        mMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
+            @Override
+            public void onMyLocationChange(Location location) {
+                if (location != null) {
+                    LatitudeTextView.setText(String.valueOf(location.getLatitude()));
+                    LongitudeTextView.setText(String.valueOf(location.getLongitude()));
+                }}
+
+        });
+
+    }
+}
+
+
+
+
+
 
 
 
