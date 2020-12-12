@@ -44,6 +44,8 @@ public class ProfileMapsActivity extends AppCompatActivity implements OnMapReady
     private TextView LatitudeTextView, LongitudeTextView, NameTextView;
 
     private GoogleMap mMap;
+    LayoutInflater inflater;
+    GridView PhotosGridView;
 
     public ProfileMapsActivity() {
     }
@@ -65,13 +67,21 @@ public class ProfileMapsActivity extends AppCompatActivity implements OnMapReady
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
+    LayoutInflater inflater;
+    GridView PhotosGridview;
 
     private void Init() {
+        PhotosGridView = findViewById(R.id.PhotosGridView);
+        inflater= LayoutInflater.from(this);
+        PhotosGridView.setAdapter(new PhotoGridAdatper);
+
         LatitudeTextView = findViewById(R.id.LatitudeTextView);
         LongitudeTextView = findViewById(R.id.LongitudeTextView);
         NameTextView = findViewById(R.id.NameTextView);
 
     }
+
+    public class PhotoGridAdatper extends BaseAdapter {}
 
     /**
      * Manipulates the map once available.
