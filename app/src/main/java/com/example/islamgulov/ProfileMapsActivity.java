@@ -8,6 +8,9 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -30,6 +33,8 @@ import static com.example.islamgulov.UserStaticInfo.profileId;
 
 public class ProfileMapsActivity extends AppCompatActivity implements OnMapReadyCallback {
     FirebaseDatabase database;
+    Location lastLocation;
+    PolylineOptions rectOptions = new PolylineOptions(); Polyline polygon;
 
 
 
@@ -106,8 +111,20 @@ public class ProfileMapsActivity extends AppCompatActivity implements OnMapReady
 
                 database.getReference(USERS_PROFILE_INFO).child(profileId).child(POSITION_LATITUDE).setValue(Lat);
                 database.getReference(USERS_PROFILE_INFO).child(profileId).child(POSITION_LONGITUDE).setValue(Lon);
-                    LatitudeTextView.setText(String.valueOf(location.getLatitude()));
-                    LongitudeTextView.setText(String.valueOf(location.getLongitude()));
+                    LatitudeTextView.setText(Lat);
+                    LongitudeTextView.setText(Lon);
+
+                    if (lastLocation != null)
+                    {
+                        if(polygon!=null)
+                            polygon.remove();
+                        rectOptions.add(new LatLng(location.getLatitude(),location.getLongitude()));
+                        polygon =mMap.addPolyline(rectOptions);
+                    }
+
+                    else
+                        rectOptions.add(new LatLng(location.getLatitude(),location.getLongitude()));
+                    lastLocation = location;
                 }}
 
         });
