@@ -16,6 +16,35 @@ public class Transform {
             return  false;
         else return string.length() != 0;
     }
+    public static Bitmap getRoundedCornerCubeBitmap(Bitmap bitmap,float radiusInPx) {
+        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
+                bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas();
+        canvas.setBitmap(output);
+
+        final int color = 0xff424242;
+        final Paint paint = new Paint();
+        final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+        final RectF rectF = new RectF(rect);
+
+        paint.setAntiAlias(true);
+        canvas.drawARGB(0, 0, 0, 0);
+        paint.setColor(color);
+        canvas.drawRoundRect(rectF, radiusInPx, radiusInPx, paint);
+
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(bitmap, rect, rect, paint);
+
+        return output;
+    }
+
+    public static Bitmap getRoundedMapBitmap(Bitmap bitmap) {
+        int iconSize = 100;
+        Bitmap output = Bitmap.createScaledBitmap(bitmap, iconSize, iconSize, false);
+        return getRoundedCornerCubeBitmap(output,iconSize);
+    }
+
+
 
     public static void SaveUser(SharedPreferences sp,String login, String password)
     {
@@ -49,4 +78,15 @@ public class Transform {
         return parse;
 
     }
+
+
+    private static class Bitmap {
+        public void getWidth() {
+        }
+
+        public void getHeight() {
+        }
+    }
 }
+
+

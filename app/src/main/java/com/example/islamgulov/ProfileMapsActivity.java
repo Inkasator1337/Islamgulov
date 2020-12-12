@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.firebase.database.DataSnapshot;
@@ -26,6 +27,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import android.widget.TextView;
 
+import static com.example.islamgulov.Transform.getRoundedMapBitmap;
+import static com.example.islamgulov.UserStaticInfo.ActiveUser;
 import static com.example.islamgulov.UserStaticInfo.POSITION_LATITUDE;
 import static com.example.islamgulov.UserStaticInfo.POSITION_LONGITUDE;
 import static com.example.islamgulov.UserStaticInfo.USERS_PROFILE_INFO;
@@ -38,7 +41,7 @@ public class ProfileMapsActivity extends AppCompatActivity implements OnMapReady
 
 
 
-    private TextView LatitudeTextView, LongitudeTextView;
+    private TextView LatitudeTextView, LongitudeTextView, NameTextView;
 
     private GoogleMap mMap;
 
@@ -55,6 +58,7 @@ public class ProfileMapsActivity extends AppCompatActivity implements OnMapReady
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         Init();
+        NameTextView.setText(ActiveUser.getName());
     }
 
     @Override
@@ -65,6 +69,7 @@ public class ProfileMapsActivity extends AppCompatActivity implements OnMapReady
     private void Init() {
         LatitudeTextView = findViewById(R.id.LatitudeTextView);
         LongitudeTextView = findViewById(R.id.LongitudeTextView);
+        NameTextView = findViewById(R.id.NameTextView);
 
     }
 
@@ -103,6 +108,7 @@ public class ProfileMapsActivity extends AppCompatActivity implements OnMapReady
             public void onMyLocationChange(Location location) {
                 if (location !=null)
                 {
+                    mMap.clear();
                 if (database == null)
                     database = FirebaseDatabase.getInstance();
 
@@ -113,6 +119,7 @@ public class ProfileMapsActivity extends AppCompatActivity implements OnMapReady
                 database.getReference(USERS_PROFILE_INFO).child(profileId).child(POSITION_LONGITUDE).setValue(Lon);
                     LatitudeTextView.setText(Lat);
                     LongitudeTextView.setText(Lon);
+                    LatLng latLng = new LatLng(location.getLatitude(),location.getLongitude());
 
                     if (lastLocation != null)
                     {
@@ -125,6 +132,11 @@ public class ProfileMapsActivity extends AppCompatActivity implements OnMapReady
                     else
                         rectOptions.add(new LatLng(location.getLatitude(),location.getLongitude()));
                     lastLocation = location;
+
+                    Bitmap bitmap = BitmapFactory.decodeResouce(getResouces(),R.drawable.www);
+                    mMap.addMarker(new MarkerOptions()
+                    .position(latLng)
+                    .icon(BitmapDescriptorFactory.fromBitmap(getRoundedMapBitmap(bitmap))));
                 }}
 
         });

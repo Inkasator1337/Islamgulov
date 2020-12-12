@@ -1,8 +1,29 @@
 package com.example.islamgulov;
 
+import com.google.firebase.database.DataSnapshot;
+import static com.example.islamgulov.Transform.parseIntOrDefault;
+
+import static com.example.islamgulov.UserStaticInfo.AGE;
+import static com.example.islamgulov.UserStaticInfo.NAME;
+import static com.example.islamgulov.UserStaticInfo.STATE;
+
 public class User {
     private String Name, State;
     private int Age;
+
+    public User(DataSnapshot dataSnapshot)
+    {
+        Object NameObj = dataSnapshot.child(NAME).getValue();
+        if(NameObj != null)
+            Name = NameObj.toString();
+        Object StateObj = dataSnapshot.child(STATE).getValue();
+        if (StateObj != null)
+            State = StateObj.toString();
+        Object AgeObj = dataSnapshot.child(AGE).getValue();
+        if (AgeObj != null)
+            Age = parseIntOrDefault(AgeObj.toString(),0);
+
+    }
 
     public  int getStateSignal()
     {

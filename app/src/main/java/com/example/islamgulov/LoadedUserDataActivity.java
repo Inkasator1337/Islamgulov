@@ -12,7 +12,9 @@ import android.os.Bundle;
 import android.content.Intent;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-
+import static com.example.islamgulov.Transform.StringNoNull;
+import static com.example.islamgulov.UserStaticInfo.ActiveUser;
+import static com.example.islamgulov.UserStaticInfo.NAME;
 import static com.example.islamgulov.UserStaticInfo.USERS_PROFILE_INFO;
 import static com.example.islamgulov.UserStaticInfo.profileId;
 
@@ -46,11 +48,14 @@ public class LoadedUserDataActivity extends AppCompatActivity {
         {
 
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                goNext();
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+            {
+                if(StringNoNull(dataSnapshot.child(NAME).getValue().toString()) )
+                goNext(dataSnapshot);
             }
 
-            private void goNext() {
+            private void goNext(DataSnapshot dataSnapshot) {
+                ActiveUser = new User(dataSnapshot);
                 Intent intent = new Intent(LoadedUserDataActivity.this,ProfileMapsActivity.class);
                 startActivity(intent);
                 finish();
