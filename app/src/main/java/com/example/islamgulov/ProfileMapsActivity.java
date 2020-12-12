@@ -8,6 +8,11 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -18,13 +23,23 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import android.widget.TextView;
 
-public class ProfileMapsActivity extends FragmentActivity implements OnMapReadyCallback {
+import static com.example.islamgulov.UserStaticInfo.POSITION_LATITUDE;
+import static com.example.islamgulov.UserStaticInfo.POSITION_LONGITUDE;
+import static com.example.islamgulov.UserStaticInfo.USERS_PROFILE_INFO;
+import static com.example.islamgulov.UserStaticInfo.profileId;
+
+public class ProfileMapsActivity extends AppCompatActivity implements OnMapReadyCallback {
+    FirebaseDatabase database;
+
+
+
     private TextView LatitudeTextView, LongitudeTextView;
 
     private GoogleMap mMap;
 
     public ProfileMapsActivity() {
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +50,11 @@ public class ProfileMapsActivity extends FragmentActivity implements OnMapReadyC
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         Init();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     private void Init() {
@@ -71,21 +91,21 @@ public class ProfileMapsActivity extends FragmentActivity implements OnMapReadyC
 
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        try { setMapLocationChange();}
-        catch (Exception e){}
-
-
-    }
-
     private void setMapLocationChange() {
         mMap.setMyLocationEnabled(true);
         mMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
             @Override
             public void onMyLocationChange(Location location) {
-                if (location != null) {
+                if (location !=null)
+                {
+                if (database == null)
+                    database = FirebaseDatabase.getInstance();
+
+                String Lat = String.valueOf(location.getLatitude());
+                String Lon = String.valueOf(location.getLongitude());
+
+                database.getReference(USERS_PROFILE_INFO).child(profileId).child(POSITION_LATITUDE).setValue(Lat);
+                database.getReference(USERS_PROFILE_INFO).child(profileId).child(POSITION_LONGITUDE).setValue(Lon);
                     LatitudeTextView.setText(String.valueOf(location.getLatitude()));
                     LongitudeTextView.setText(String.valueOf(location.getLongitude()));
                 }}
